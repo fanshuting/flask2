@@ -1,6 +1,7 @@
 ftp server
 =========
-
+＃#透過 Dockerfile 來 build image，然後使用 container 來執行 image 的流程。
+#build image:指定一個 image 來源。
 ftp server based on `pure-ftpd`. Make sure to connect using `passive` mode in the client. 
 
 `docker build --rm -t ftpserver .`
