@@ -1,7 +1,7 @@
 # ftp server
 #
 # VERSION               0.0.3
-#
+#透過 Dockerfile 來 build image，然後使用 container 來執行 image 的流程。
 #build image:指定一個 image 來源。
 
 
