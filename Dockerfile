@@ -12,8 +12,9 @@ RUN echo "pasv_enable=YES" >> /etc/vsftpd.conf
 RUN echo "pasv_min_port=65000" >> /etc/vsftpd.conf
 RUN echo "pasv_max_port=65000" >> /etc/vsftpd.conf
 RUN echo "pasv_address=192.168.90.199" >> /etc/vsftpd.conf
-RUN useradd -b /home/vsftpd -ms /bin/bash user && echo 'user:pwd' | chpasswd
 RUN mkdir -p /var/run/vsftpd/empty
+RUN useradd -b /home/vsftpd -ms /bin/bash user && echo 'user:pwd' | chpasswd
+
 
 EXPOSE 21/tcp
 EXPOSE 65000/tcp
