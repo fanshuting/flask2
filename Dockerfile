@@ -2,10 +2,7 @@
 #
 # VERSION               0.0.3
 #
-# Links:
-# - https://help.ubuntu.com/community/PureFTP
-# - http://www.dikant.de/2009/01/22/setting-up-pureftpd-on-a-virtual-server/
-# - http://download.pureftpd.org/pub/pure-ftpd/doc/README
+#build image:指定一個 image 來源。
 
 
 FROM ubuntu:16.04
