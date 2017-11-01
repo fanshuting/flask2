@@ -1,48 +1,31 @@
 ubuntu run ftp server
 =====================
-#透過 Dockerfile 來 build image，然後使用 container 來執行 image 的流程。
+#透過 Dockerfile 來 build image，然後使用container來執行image
 #ftp://192.168.90.199
-ftp server based on `pure-ftpd`. Make sure to connect using `passive` mode in the client. 
 
-`docker build --rm -t ftpserver .`
+#運行docker時，我綁定端口21和65000
+#用命令構建和運行：
+#docker build -t vsftpd .
+#docker run -d -p 21:21 -p 65000:65000 -v /etc/passwd:/etc/passwd:ro -v /etc/shadow:/etc/shadow:ro -v /etc/group:/etc/group:ro -v /home:/home vsftpd
 
-`docker run -d -p 20:20 -p 21:21 -p 30000:30000 -p 30001:30001 -p 30002:30002 -p 30003:30003 -p 30004:30004 -p 30005:30005 -p 30006:30006 -p 30007:30007 -p 30008:30008 -p 30009:30009 --name ftpserver ftpserver`
+FROM ubuntu:16.04
+RUN apt-get update
+RUN apt-get dist-upgrade -y
+RUN apt-get install -y -q --no-install-recommends vsftpd
+RUN apt-get clean
 
+RUN echo "local_enable=YES" >> /etc/vsftpd.conf
+RUN echo "chroot_local_user=YES" >> /etc/vsftpd.conf
+RUN echo "allow_writeable_chroot=YES" >> /etc/vsftpd.conf
+RUN echo "write_enable=YES" >> /etc/vsftpd.conf
+RUN echo "pasv_enable=YES" >> /etc/vsftpd.conf
+RUN echo "pasv_min_port=65000" >> /etc/vsftpd.conf
+RUN echo "pasv_max_port=65000" >> /etc/vsftpd.conf
+RUN echo "pasv_address=192.168.1.31" >> /etc/vsftpd.conf
 
-Example of ftp session:
+RUN mkdir -p /var/run/vsftpd/empty
 
-	ftp 192.168.59.103
-	Connected to 192.168.59.103.
-	220---------- Welcome to Pure-FTPd [privsep] ----------
-	220-You are user number 1 of 50 allowed.
-	220-Local time is now 18:58. Server port: 21.
-	220-IPv6 connections are also welcome on this server.
-	220 You will be disconnected after 15 minutes of inactivity.
-	Name (192.168.59.103:jonas): someone
-	331 User someone OK. Password required
-	Password: 
-	230 OK. Current directory is /home/someone
-	Remote system type is UNIX.
-	Using binary mode to transfer files.
-	ftp> passive
-	Passive mode: off; fallback to active mode: off.
-	ftp> ls
-	200 PORT command successful
-	150 Connecting to port 64265
-	226-Options: -l 
-	226 0 matches total
-	ftp> mkdir in
-	257 "in" : The directory was successfully created
-	ftp> dir
-	200 PORT command successful
-	150 Connecting to port 64266
-	drwxr-xr-x    2 someone    someone          4096 Sep 17 18:58 in
-	226-Options: -l 
-	226 1 matches total
+EXPOSE 21/tcp
+EXPOSE 65000/tcp
 
-
-
-Debugging
----------
-
-Run the server in interactive mode: `docker run -t -i ftpserver /bin/bash`
+CMD vsftpd
